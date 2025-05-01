@@ -3,7 +3,7 @@ Lending Application Quick Start
 This is a Spring Boot application designed to manage lending operations, including product creation, loan disbursement, 
 repayment handling and notifications.
 
-# ==================================================================================================================
+# ================================================
 Key Features
 
     Product management with configurable tenure and fees
@@ -13,7 +13,7 @@ Key Features
     Payment and installment tracking
     Fee calculation and application
 
-# ==================================================================================================================
+# ================================================
 Technology Stack
 
     Language: Java 17
@@ -26,7 +26,7 @@ Technology Stack
     Lombok
     Flyway (Migrations)
 
-# ==================================================================================================================
+# ================================================
 System Requirements
 Prerequisites
 
@@ -35,7 +35,7 @@ Prerequisites
     PostgreSQL 12+
     Git
 
-# ==================================================================================================================
+# ================================================
 Installation
 
     1. Clone the repository: git clone <repository-url>
@@ -43,7 +43,7 @@ Installation
     3. Run the application: ./gradlew bootRun --args='--spring.profiles.active=local'
     4. Postman documentation: https://documenter.getpostman.com/view/37602788/2sB2j4eqJZ
 
-# ==================================================================================================================
+# ================================================
 Configuration
 Environment Variables
 
@@ -75,7 +75,7 @@ Alternatively, you can modify application-local.properties for local development
     spring.jpa.properties.hibernate.format_sql=true
     spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
-# ==================================================================================================================
+# ================================================
 Database Migrations
 Flyway Setup in application-local.properties
 
@@ -90,7 +90,7 @@ Flyway Setup in application-local.properties
 You can run database migrations with Flyway by including the following task:
 ./gradlew flywayMigrate
 
-# ==================================================================================================================
+# ================================================
 Notification Configuration
 
 To configure notification settings, ensure the following properties are set:
@@ -115,13 +115,13 @@ Notification Templates
     notification.template.installment_reminder=Dear {{firstName}}, This is a reminder that your loan installment of {{installmentAmount}} is due on {{installmentDueDate}}.
     notification.template.loan_overdue=Dear {{firstName}}, Your loan payment of {{currentBalance}} was due on {{dueDate}} and is now {{daysOverdue}} days overdue.
 
-# ==================================================================================================================
+# ================================================
 Testing
 
 To run tests, execute the following command:
 ./gradlew test
 
-# ==================================================================================================================
+# ================================================
 API Endpoints
 
 # Product Management
@@ -153,7 +153,7 @@ API Endpoints
     GET    /lender/v1/fees/{id}             - Get fee details
     PUT    /lender/v1/fees/{id}             - Update fee
 
-# ==================================================================================================================
+# ================================================
 Trade-offs & Assumptions
 
 This implementation includes several deliberate trade-offs made for the scope of this project:
@@ -163,19 +163,19 @@ This implementation includes several deliberate trade-offs made for the scope of
     No actual payment gateway integration
     No admin UI/portal for management
 
-# ==================================================================================================================
+# ================================================
 Production Deployment
 
 To deploy the application in production:
 ./gradlew bootJar
 java -jar build/libs/lender-1.0.0.jar --spring.profiles.active=prod
 
-# ==================================================================================================================
+# ================================================
 Postman Documentation
 
     https://documenter.getpostman.com/view/37602788/2sB2j4eqJZ
 
-# ==================================================================================================================
+# ================================================
 Additional Notes
 
     Database migrations will run automatically on application startup.
