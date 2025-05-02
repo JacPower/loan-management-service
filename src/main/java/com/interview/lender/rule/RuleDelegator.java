@@ -22,7 +22,7 @@ public class RuleDelegator {
                 .findFirst()
                 .map(rule -> rule.execute(ruleOperation, requestPayload))
                 .orElseThrow(() -> {
-                    var message = "No handler found for request type: " + businessRule;
+                    var message = "No rule found for request type: " + businessRule;
                     log.error(message);
                     return BusinessException.unknownOperation(message);
                 });
