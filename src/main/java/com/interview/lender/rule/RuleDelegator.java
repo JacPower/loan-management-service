@@ -11,7 +11,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public final class RuleDelegator {
+public class RuleDelegator {
     private final List<IRule> rules;
 
 
