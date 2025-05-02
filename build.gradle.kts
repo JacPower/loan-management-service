@@ -4,6 +4,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.hibernate.orm") version "6.6.11.Final"
 	id("org.graalvm.buildtools.native") version "0.10.6"
+	id("jacoco")
 }
 
 group = "com.interview"
@@ -46,5 +47,70 @@ hibernate {
 }
 
 tasks.withType<Test> {
+	finalizedBy(tasks.jacocoTestReport)
 	useJUnitPlatform()
+	testLogging {
+		events("passed", "skipped", "failed")
+	}
+	jvmArgs("-Xshare:off")
+	jvmArgs("-XX:+EnableDynamicAgentLoading")
 }
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+	reports {
+		xml.required.set(true)
+		csv.required.set(false)
+		html.required.set(true)
+	}
+
+	classDirectories.setFrom(files(classDirectories.files.map {
+		fileTree(it) {
+			exclude(
+				//"com/interview/*",
+				"com/interview/exception/*",
+				"com/interview/config/*",
+				"com/interview/enums/*",
+				"com/interview/util/*",
+				"com/interview/entity/*",
+				"com/interview/repository/*",
+				"com/interview/dto/*"
+			)
+		}
+	}))
+}
+
+tasks.jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			element = "CLASS"
+			excludes = listOf(
+				"com.interview.*",
+				"com.interview.exception.*",
+				"com.interview.config.*",
+				"com.interview.enums.*",
+				"com.interview.util.*",
+				"com.interview.entity.*",
+				"com.interview.dto.*"
+			)
+
+			limit {
+				counter = "LINE"
+				value = "COVEREDRATIO"
+				minimum = 0.85.toBigDecimal()
+			}
+		}
+	}
+}
+
+tasks.bootJar {
+	exclude("org/projectlombok/**")
+}
+
+configurations {
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
+	}
+}
+
+
