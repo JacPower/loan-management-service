@@ -24,7 +24,7 @@ public class FeeController {
 
 
     @PostMapping
-    public ResponseEntity<ResponseDto> createProductFee(@Valid @RequestBody FeeDto requestDto) {
+    public ResponseEntity<ResponseDto> createFee(@Valid @RequestBody FeeDto requestDto) {
         ResponseDto response = ruleDelegator.routeRequest(PRODUCT, CREATE_FEE, requestDto);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
