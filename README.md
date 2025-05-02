@@ -16,7 +16,7 @@ Key Features
 # ==============
 Technology Stack
 
-    Language: Java 17
+    Language: Java 21
     Framework: Spring Boot
     Database: PostgreSQL
     Build Tool: Gradle
@@ -30,9 +30,9 @@ Technology Stack
 System Requirements
 Prerequisites
 
-    Java 17+
+    Java 21+
     Gradle 7.x+
-    PostgreSQL 12+
+    PostgreSQL 14+
     Git
 
 # ==============
@@ -183,3 +183,78 @@ Additional Notes
     Payment transactions are recorded but no actual money transfer occurs.
     Spring security is not configured.
     Unit tests not completed.
+
+# ==============
+Database ER Diagram
+
+![db_er_diagram](https://github.com/user-attachments/assets/03f59d28-571d-44ce-9ce1-0b64ecaf5727)
+
+
+# ==============
+High Level Architecture Overview
+
+<img width="1908" alt="Screenshot 2025-05-02 at 08 19 04" src="https://github.com/user-attachments/assets/10445ab2-84c4-4765-9fab-0e9febba6943" />
+
+
+This lending application is a cloud-native, API-driven system with a modular, layered design that ensures scalability, maintainability, and separation of concerns.
+
+⸻
+
+Customer Layer
+	•	Interfaces: Users interact via web, mobile, and USSD platforms.
+	•	API Gateway: Acts as the unified entry point, providing:
+	•	Load balancing for high availability
+	•	Authentication and authorization
+	•	Rate limiting and traffic control
+
+⸻
+
+Application Layer
+
+The core application is composed of specialized API modules:
+	•	Customer API – Manages user profiles and customer data
+	•	Products API – Configures and manages loan products
+	•	Fees API – Handles fee structures and calculations
+	•	Loans API – Processes loan applications and lifecycle management
+	•	Settings API – Controls global system configurations
+	•	Job Scheduler – Runs background jobs and scheduled tasks
+
+Processing Architecture:
+	•	Rule Delegation Layer – Routes tasks to appropriate engines
+	•	Rule Executors – Execute loan-specific business logic
+	•	Processors – Handle discrete tasks (handlers, orchestrators, rulesets)
+	•	JPA Layer – Persists data to cloud databases
+
+⸻
+
+Data & Integration Layer
+	•	Cloud Storage:
+	•	Primary Database – Central transactional datastore
+	•	Replica Databases – Read-optimized replicas (RP1, RP2)
+	•	Data Warehouse – Centralized analytics store (BigQuery)
+
+⸻
+
+Analytics Layer
+	•	Business Intelligence & Reporting:
+Supports integration with Tableau, Metabase, and Power BI for dashboards and insights.
+
+⸻
+
+External Integrations
+	•	Log Ingester – Collects and streams system logs to observability tools (New Relic, Grafana)
+	•	External Data Feeds – Enriches the analytics layer with third-party data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
