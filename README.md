@@ -16,7 +16,7 @@ Key Features
 # ==============
 Technology Stack
 
-    Language: Java 17
+    Language: Java 21
     Framework: Spring Boot
     Database: PostgreSQL
     Build Tool: Gradle
@@ -30,9 +30,9 @@ Technology Stack
 System Requirements
 Prerequisites
 
-    Java 17+
+    Java 21+
     Gradle 7.x+
-    PostgreSQL 12+
+    PostgreSQL 14+
     Git
 
 # ==============
