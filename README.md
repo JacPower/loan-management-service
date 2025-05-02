@@ -183,3 +183,10 @@ Additional Notes
     Payment transactions are recorded but no actual money transfer occurs.
     Spring security is not configured.
     Unit tests not completed.
+
+# ==============
+Database ER Diagram
+
+![db_er_diagram](https://github.com/user-attachments/assets/03f59d28-571d-44ce-9ce1-0b64ecaf5727)
+
+
