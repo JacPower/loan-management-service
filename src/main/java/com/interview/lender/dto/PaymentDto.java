@@ -5,10 +5,12 @@ import com.interview.lender.enums.PaymentMethod;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Data
 public class PaymentDto {
     @NotNull(message = "Loan code cannot be null")
@@ -29,5 +31,6 @@ public class PaymentDto {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    @Builder.Default
     private LocalDateTime paymentDate = LocalDateTime.now();
 }

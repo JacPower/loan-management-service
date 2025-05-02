@@ -5,12 +5,14 @@ import com.interview.lender.enums.Gender;
 import com.interview.lender.enums.NotificationChannel;
 import com.interview.lender.enums.CustomerStatus;
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
+@Builder
 @Data
 public class CustomerDto {
     UUID id;
@@ -53,5 +55,7 @@ public class CustomerDto {
     private BillingCycle billingCycle;
 
     private Set<NotificationChannel> preferredChannels;
+
+    @Builder.Default
     private CustomerStatus status = CustomerStatus.ACTIVE;
 }
