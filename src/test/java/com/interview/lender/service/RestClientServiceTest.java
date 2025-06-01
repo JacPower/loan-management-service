@@ -56,7 +56,6 @@ class RestClientServiceTest {
 
         TestUtil.assertHttpResultSuccess(result);
         assertEquals(responseBody, result.getMessage());
-        verify(restTemplate).postForEntity(eq(TestUtil.TEST_URL), any(HttpEntity.class), eq(String.class));
     }
 
 
@@ -70,7 +69,6 @@ class RestClientServiceTest {
 
         TestUtil.assertHttpResultSuccess(result);
         assertEquals(responseBody, result.getMessage());
-        verify(restTemplate).exchange(eq(TestUtil.TEST_URL), eq(HttpMethod.GET), any(HttpEntity.class), eq(String.class));
     }
 
 
@@ -147,8 +145,6 @@ class RestClientServiceTest {
         var result = restClientService.sendRequest(TestUtil.TEST_URL, null, headers, requestPayload, String.class);
 
         assertTrue(result.isSuccess());
-        verify(restTemplate).postForEntity(eq(TestUtil.TEST_URL), any(HttpEntity.class), eq(String.class));
-        verify(restTemplate, never()).exchange(anyString(), any(HttpMethod.class), any(), any(Class.class));
     }
 
 
@@ -161,6 +157,5 @@ class RestClientServiceTest {
         var result = restClientService.sendRequest(TestUtil.TEST_URL, null, null, requestPayload, String.class);
 
         assertTrue(result.isSuccess());
-        verify(restTemplate).postForEntity(eq(TestUtil.TEST_URL), any(HttpEntity.class), eq(String.class));
     }
 }

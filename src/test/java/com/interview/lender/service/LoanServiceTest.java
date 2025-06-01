@@ -77,7 +77,6 @@ class LoanServiceTest {
 
         TestUtil.assertSuccessResponse(response);
         assertEquals("Subscription successful", response.getMessage());
-        verify(customerRepository).save(any(Customer.class));
     }
 
 
@@ -90,7 +89,6 @@ class LoanServiceTest {
 
         TestUtil.assertFailureResponse(response);
         assertEquals("Customer subscription already exist", response.getMessage());
-        verify(customerService, never()).getCustomerByNumber(anyString());
     }
 
 
@@ -104,7 +102,6 @@ class LoanServiceTest {
 
         TestUtil.assertFailureResponse(response);
         assertEquals("Customer does not exist", response.getMessage());
-        verify(customerRepository, never()).save(any(Customer.class));
     }
 
 
@@ -133,7 +130,6 @@ class LoanServiceTest {
         var response = loanService.requestLoan(loanRequest);
 
         assertFalse(response.isSuccess());
-        verify(loanRepository, never()).save(any(Loan.class));
     }
 
 

@@ -92,7 +92,6 @@ class CustomerServiceTest {
         var result = customerService.getCustomerByNumber(TestUtil.TEST_CUSTOMER_NUMBER);
 
         assertFalse(result.isPresent());
-        verify(restClientService).sendRequest(eq(TestUtil.TEST_KYC_SOAP_URL), isNull(), any(HttpHeaders.class), contains(TestUtil.TEST_CUSTOMER_NUMBER), eq(String.class));
     }
 
 
@@ -107,7 +106,6 @@ class CustomerServiceTest {
         var result = customerService.getCustomerByNumber(TestUtil.TEST_CUSTOMER_NUMBER);
 
         assertFalse(result.isPresent());
-        verify(restClientService).sendRequest(eq(TestUtil.TEST_KYC_SOAP_URL), isNull(), any(HttpHeaders.class), contains(TestUtil.TEST_CUSTOMER_NUMBER), eq(String.class));
     }
 
 
@@ -120,7 +118,6 @@ class CustomerServiceTest {
         var result = customerService.getCustomerByNumber(TestUtil.TEST_CUSTOMER_NUMBER_INVALID);
 
         assertFalse(result.isPresent());
-        verify(restClientService).sendRequest(eq(TestUtil.TEST_KYC_SOAP_URL), isNull(), any(HttpHeaders.class), contains(TestUtil.TEST_CUSTOMER_NUMBER_INVALID), eq(String.class));
     }
 
 

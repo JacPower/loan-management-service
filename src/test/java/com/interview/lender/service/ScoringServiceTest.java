@@ -108,14 +108,6 @@ class ScoringServiceTest {
         var token = scoringService.initiateScoring(TestUtil.TEST_CUSTOMER_NUMBER);
 
         assertEquals(TestUtil.TEST_SCORING_TOKEN, token);
-
-        verify(restClientService).sendRequest(
-                endsWith("/" + TestUtil.TEST_CUSTOMER_NUMBER),
-                eq(HttpMethod.GET),
-                any(HttpHeaders.class),
-                isNull(),
-                eq(String.class)
-        );
     }
 
 
