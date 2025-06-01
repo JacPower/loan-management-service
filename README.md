@@ -113,6 +113,7 @@ transaction.api.password=lms_pass_123
 ```http
 POST /api/v1/loans/subscribe
 Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 
 {
     "customerNumber": "234774784"
@@ -123,6 +124,7 @@ Content-Type: application/json
 ```http
 POST /api/v1/loans/request
 Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 
 {
     "customerNumber": "234774784",
@@ -132,6 +134,7 @@ Content-Type: application/json
 
 #### **Loan Status**
 ```http
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 GET /api/v1/loans/status/{customerNumber}
 ```
 
@@ -139,6 +142,7 @@ GET /api/v1/loans/status/{customerNumber}
 
 #### **Get Transaction Data**
 ```http
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 GET /api/v1/transaction-data/{customerNumber}
 ```
 
