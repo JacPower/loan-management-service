@@ -63,14 +63,14 @@ tasks.jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.map {
         fileTree(it) {
             exclude(
-                //"com/interview/*",
+                "com/interview/lender/*",
                 "com/interview/exception/*",
-                "com/interview/config/*",
-                "com/interview/enums/*",
-                "com/interview/util/*",
-                "com/interview/entity/*",
-                "com/interview/repository/*",
-                "com/interview/dto/*"
+                "com/interview/lender/config/*",
+                "com/interview/lender/enums/*",
+                "com/interview/lender/util/*",
+                "com/interview/lender/entity/*",
+                "com/interview/lender/repository/*",
+                "com/interview/lender/dto/*"
             )
         }
     }))
@@ -82,12 +82,12 @@ tasks.jacocoTestCoverageVerification {
             element = "CLASS"
             excludes = listOf(
                 "com.interview.*",
-                "com.interview.exception.*",
-                "com.interview.config.*",
-                "com.interview.enums.*",
-                "com.interview.util.*",
-                "com.interview.entity.*",
-                "com.interview.dto.*"
+                "com.interview.lender.exception.*",
+                "com.interview.lender.config.*",
+                "com.interview.lender.enums.*",
+                "com.interview.lender.util.*",
+                "com.interview.lender.entity.*",
+                "com.interview.lender.dto.*"
             )
 
             limit {

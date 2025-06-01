@@ -50,7 +50,7 @@ Mobile App (USSD/iOS/Android) → LMS APIs → CBS (KYC/Transactions) → Scorin
 
 ### **1. Clone the Repository**
 ```bash
-git clone <repository-url>
+git clone git@github.com:JacPower/loan-management-service.git
 cd lending-management-system
 ```
 
@@ -61,21 +61,15 @@ cd lending-management-system
 
 ### **3. Run the Application**
 
-#### **Development Mode (H2 Database)**
-```bash
-./gradlew bootRun
-```
-
-#### **Production Mode**
+#### **Development Mode**
 ```bash
 ./gradlew bootJar
-java -jar build/libs/lending-management-system-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+java -jar build/libs/lending-management-system-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
 ```
 
 ### **4. Access the Application**
 - **Application**: `http://localhost:8080`
-- **API Documentation**: `http://localhost:8080/swagger-ui.html`
-- **Health Check**: `http://localhost:8080/api/v1/health`
+- **API Documentation**: `http://localhost:8080/lender/api/v1/swagger-ui.html`
 
 ## ⚙️ **Configuration**
 
@@ -85,22 +79,16 @@ The application uses `application.properties` for configuration management:
 ```properties
 # Server Configuration
 server.port=8080
-spring.application.name=lending-management-system
+spring.application.name=lender
 
 # Database Configuration (Development)
-spring.datasource.url=jdbc:h2:mem:testdb
-spring.datasource.driver-class-name=org.h2.Driver
-spring.datasource.username=sa
-spring.datasource.password=password
-
-# Database Configuration (Production)
-# spring.datasource.url=jdbc:postgresql://localhost:5432/lms
-# spring.datasource.username=lms_user
-# spring.datasource.password=your_password
+ spring.datasource.url=jdbc:postgresql://localhost:5432/lender
+ spring.datasource.username=your_user
+ spring.datasource.password=your_password
 
 # CBS SOAP Configuration
-cbs.kyc.wsdl.url=https://kycapidevtest.credable.io/service/customerWsdl.wsdl
-cbs.transaction.wsdl.url=https://trxapidevtest.credable.io/service/transactionWsdl.wsdl
+cbs.kyc.wsdl.url=https://kycapidevtest.credable.io/service
+cbs.transaction.wsdl.url=https://trxapidevtest.credable.io/service
 cbs.username=admin
 cbs.password=pwd123
 
@@ -116,39 +104,6 @@ scoring.retry.delay.seconds=10
 transaction.api.service.name=LMS Transaction Service
 transaction.api.username=lms_user
 transaction.api.password=lms_pass_123
-
-# Security Configuration
-spring.security.user.name=admin
-spring.security.user.password=admin123
-spring.security.user.roles=ADMIN
-```
-
-### **Environment-Specific Configuration**
-
-#### **Development (`application-dev.properties`)**
-```properties
-# H2 Database
-spring.h2.console.enabled=true
-logging.level.com.lendingplatform=DEBUG
-
-# Mock external services for development
-external.services.mock.enabled=true
-```
-
-#### **Production (`application-prod.properties`)**
-```properties
-# PostgreSQL Database
-spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/lms}
-spring.datasource.username=${DB_USERNAME:lms_user}
-spring.datasource.password=${DB_PASSWORD:your_password}
-
-# Production logging
-logging.level.com.lendingplatform=INFO
-logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %level - %msg%n
-
-# External service URLs
-cbs.kyc.wsdl.url=${CBS_KYC_URL:https://kycapi.bank.com/service/customerWsdl.wsdl}
-scoring.base.url=${SCORING_URL:https://scoring.credable.io}
 ```
 
 ## 📡 **API Endpoints**
@@ -159,7 +114,6 @@ scoring.base.url=${SCORING_URL:https://scoring.credable.io}
 ```http
 POST /api/v1/loans/subscribe
 Content-Type: application/json
-Authorization: Basic YWRtaW46YWRtaW4xMjM=
 
 {
     "customerNumber": "234774784"
@@ -170,7 +124,6 @@ Authorization: Basic YWRtaW46YWRtaW4xMjM=
 ```http
 POST /api/v1/loans/request
 Content-Type: application/json
-Authorization: Basic YWRtaW46YWRtaW4xMjM=
 
 {
     "customerNumber": "234774784",
@@ -181,7 +134,6 @@ Authorization: Basic YWRtaW46YWRtaW4xMjM=
 #### **Loan Status**
 ```http
 GET /api/v1/loans/status/{customerNumber}
-Authorization: Basic YWRtaW46YWRtaW4xMjM=
 ```
 
 ### **Transaction Data API (For Scoring Service)**
@@ -189,12 +141,6 @@ Authorization: Basic YWRtaW46YWRtaW4xMjM=
 #### **Get Transaction Data**
 ```http
 GET /api/v1/transaction-data/{customerNumber}
-Authorization: Basic bG1zX3VzZXI6bG1zX3Bhc3NfMTIz
-```
-
-### **System Health**
-```http
-GET /api/v1/health
 ```
 
 ## 🔐 **Authentication & Security**
@@ -203,19 +149,7 @@ GET /api/v1/health
 - **Admin User**: `admin:admin123` (ADMIN role)
 - **Scoring Service User**: `lms_user:lms_pass_123` (USER role)
 
-### **API Security**
-- Basic Authentication for all endpoints
-- Role-based access control
-- Public access for health checks and API documentation
-
 ### **Security Headers**
-```bash
-# Admin Authentication
-Authorization: Basic YWRtaW46YWRtaW4xMjM=
-
-# Scoring Service Authentication
-Authorization: Basic bG1zX3VzZXI6bG1zX3Bhc3NfMTIz
-```
 
 ## 🔄 **Business Logic & Workflow**
 
@@ -255,39 +189,61 @@ Authorization: Basic bG1zX3VzZXI6bG1zX3Bhc3NfMTIz
 
 #### **Customer Table**
 ```sql
-CREATE TABLE customers (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    customer_number VARCHAR(255) UNIQUE NOT NULL,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
-    phone_number VARCHAR(255),
-    email VARCHAR(255),
-    national_id VARCHAR(255),
-    is_active BOOLEAN,
-    registration_date TIMESTAMP,
-    scoring_token VARCHAR(255),
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP
+CREATE TABLE IF NOT EXISTS customers (
+     id BIGSERIAL PRIMARY KEY,
+     customer_number VARCHAR(50) UNIQUE NOT NULL,
+     first_name VARCHAR(30),
+     last_name VARCHAR(30),
+     middle_name VARCHAR(30),
+     phone_number VARCHAR(12),
+     email VARCHAR(50),
+     gender VARCHAR(50),
+     id_number VARCHAR(50),
+     id_number_type VARCHAR(50),
+     monthly_income DOUBLE PRECISION DEFAULT 0,
+     is_active BOOLEAN DEFAULT TRUE,
+     scoring_token VARCHAR(50),
+     registration_date TIMESTAMP WITHOUT TIME ZONE,
+     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
 #### **Loan Table**
 ```sql
-CREATE TABLE loans (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    customer_number VARCHAR(255) NOT NULL,
-    requested_amount DECIMAL(19,2) NOT NULL,
-    approved_amount DECIMAL(19,2),
-    status ENUM('PENDING', 'SCORING_IN_PROGRESS', 'APPROVED', 'REJECTED', 'FAILED') NOT NULL,
-    credit_score INTEGER,
-    credit_limit DECIMAL(19,2),
-    exclusion VARCHAR(255),
-    exclusion_reason VARCHAR(255),
-    application_date TIMESTAMP,
-    approval_date TIMESTAMP,
-    retry_count INTEGER DEFAULT 0,
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP
+CREATE TABLE IF NOT EXISTS loans (
+     id BIGSERIAL PRIMARY KEY,
+     customer_number VARCHAR(255) NOT NULL,
+     requested_amount DOUBLE PRECISION DEFAULT 0,
+     approved_amount DOUBLE PRECISION DEFAULT 0,
+     status VARCHAR(50) NOT NULL,
+     credit_score INTEGER,
+     credit_limit DOUBLE PRECISION DEFAULT 0,
+     exclusion VARCHAR(255),
+     exclusion_reason VARCHAR(500),
+     application_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+     approval_date TIMESTAMP WITHOUT TIME ZONE,
+     disbursement_date TIMESTAMP WITHOUT TIME ZONE,
+     retry_count INTEGER DEFAULT 0,
+     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
+    -- Constraints
+     CONSTRAINT loans_status_check CHECK (
+         status IN ('PENDING', 'SCORING_IN_PROGRESS', 'APPROVED', 'REJECTED', 'DISBURSED', 'FAILED')
+         ),
+     CONSTRAINT loans_requested_amount_positive CHECK (requested_amount > 0),
+     CONSTRAINT loans_approved_amount_positive CHECK (approved_amount IS NULL OR approved_amount > 0),
+     CONSTRAINT loans_credit_score_range CHECK (credit_score IS NULL OR (credit_score >= 0 AND credit_score <= 1000)),
+     CONSTRAINT loans_credit_limit_positive CHECK (credit_limit IS NULL OR credit_limit >= 0),
+     CONSTRAINT loans_retry_count_non_negative CHECK (retry_count >= 0),
+
+    -- Foreign key relationship (soft reference)
+     CONSTRAINT fk_loans_customer_number
+         FOREIGN KEY (customer_number)
+             REFERENCES customers(customer_number)
+             ON DELETE RESTRICT
+             ON UPDATE CASCADE
 );
 ```
 
@@ -295,7 +251,6 @@ CREATE TABLE loans (
 
 ### **Test Categories**
 - **Unit Tests**: Service layer with mocked dependencies
-- **Integration Tests**: Full application context with H2 database
 - **Controller Tests**: REST API testing with MockMvc
 
 ### **Test Data**
@@ -322,34 +277,15 @@ Use the provided test customer numbers:
 ```
 
 ### **Test Coverage**
-- **Total**: 49 comprehensive test methods
 - **Service Layer**: 85%+ coverage
 - **Controller Layer**: 90%+ coverage
-- **Integration**: Full workflow testing
 
 ## 📊 **Monitoring & Observability**
 
 ### **Health Checks**
-- **Application Health**: `/api/v1/health`
-- **Actuator Health**: `/actuator/health`
-- **Database Health**: `/actuator/health/db`
 
 ### **Metrics & Monitoring**
-- **Metrics Endpoint**: `/actuator/metrics`
-- **Loan Processing Metrics**: Success/failure rates
-- **External Service Metrics**: Response times and error rates
 
-### **Logging**
-```json
-{
-    "timestamp": "2025-05-30T10:15:30.123Z",
-    "level": "INFO",
-    "logger": "com.lendingplatform.service.impl.LoanServiceImpl",
-    "message": "Processing loan request for customer: 234774784, amount: 10000",
-    "customerNumber": "234774784",
-    "loanAmount": 10000
-}
-```
 
 ## 🚀 **Deployment**
 
@@ -366,7 +302,7 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
 docker build -t lms-app .
 
 # Run container
-docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod lms-app
+docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev lms-app
 ```
 
 ### **Production Deployment**
@@ -376,7 +312,7 @@ docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod lms-app
 
 # Deploy with production profile
 java -jar build/libs/lending-management-system-0.0.1-SNAPSHOT.jar \
-  --spring.profiles.active=prod \
+  --spring.profiles.active=dev \
   --server.port=8080
 ```
 
@@ -404,11 +340,11 @@ LMS → CBS Transaction (SOAP) → Historical Data
 
 ### **Swagger UI**
 Access comprehensive API documentation at:
-`http://localhost:8080/swagger-ui.html`
+`http://localhost:8080/lender/api/v1/swagger-ui.html`
 
 ### **OpenAPI Specification**
 Download API specification at:
-`http://localhost:8080/api-docs`
+`http://localhost:8080/lender/api/v1/api-docs`
 
 ## 🤝 **Development Guidelines**
 
@@ -416,7 +352,7 @@ Download API specification at:
 - Follow SOLID principles
 - Clean code practices
 - Comprehensive logging
-- Unit test coverage > 80%
+- Unit test coverage > 85%
 
 ### **Architecture Patterns**
 - Layered architecture (Controller → Service → Repository)
@@ -424,43 +360,18 @@ Download API specification at:
 - Configuration externalization
 - Error handling with global exception handler
 
-## 🐛 **Troubleshooting**
-
-### **Common Issues**
-
-#### **External Service Connection Issues**
-```bash
-# Check CBS connectivity
-curl -X POST "https://kycapidevtest.credable.io/service"
-```
-
-#### **Database Connection Issues**
-```bash
-# Check H2 console (development)
-http://localhost:8080/h2-console
-
-# Check PostgreSQL connection
-psql -h localhost -p 5432 -U lms_user -d lms
-```
-
-### **Error Codes**
-- **400**: Invalid request data or business rule violation
-- **404**: Customer not found or no loan exists
-- **409**: Customer already subscribed or has ongoing loan
-- **500**: Internal server error or external service failure
-
 ## 📋 **Trade-offs & Assumptions**
 
 ### **Current Implementation**
 - **Authentication**: Basic auth (production would use JWT/OAuth)
-- **Database**: H2 for development (PostgreSQL for production)
+- **Database**: PostgreSQL for development
 - **External Services**: Real integration with test endpoints
-- **Caching**: Simple in-memory caching
 - **Error Handling**: Graceful degradation with mock data fallback
 
 ### **Production Considerations**
 - Implement JWT/OAuth authentication
 - Add rate limiting and throttling
+- Add redis cache
 - Implement circuit breaker pattern
 - Add comprehensive monitoring (New Relic, Grafana)
 - Database connection pooling and clustering
@@ -484,7 +395,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For support and questions:
 - **Email**: support@lendingplatform.com
 - **Documentation**: [API Docs](http://localhost:8080/lender/api/v1/swagger-ui/index.html#/)
-- **Issues**: [GitHub Issues](https://github.com/your-org/lms/issues)
+- **Issues**: [GitHub Issues](https://github.com)
 
 ---
 

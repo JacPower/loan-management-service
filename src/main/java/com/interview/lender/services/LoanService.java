@@ -40,13 +40,13 @@ public class LoanService {
         log.info("Processing subscription request for customer: {}", request.getCustomerNumber());
 
         if (customerRepository.existsByCustomerNumber(request.getCustomerNumber())) {
-            log.error("Customer subscription already exist | CustomerNumber: {}", request.getCustomerNumber());
+            log.warn("Customer subscription already exist | CustomerNumber: {}", request.getCustomerNumber());
             return Util.buildErrorResponse("Customer subscription already exist", CONFLICT);
         }
 
         Optional<CustomerDto> optionalCustomerDto = customerService.getCustomerByNumber(request.getCustomerNumber());
         if (optionalCustomerDto.isEmpty()) {
-            log.error("Customer not found | CustomerNumber: {}", request.getCustomerNumber());
+            log.warn("Customer not found | CustomerNumber: {}", request.getCustomerNumber());
             return Util.buildErrorResponse("Customer does not exist", NOT_FOUND);
         }
 
@@ -91,12 +91,12 @@ public class LoanService {
 
         Optional<Customer> optionalCustomer = customerRepository.findByCustomerNumber(request.getCustomerNumber());
         if (optionalCustomer.isEmpty()) {
-            log.error("Customer has not subscribed to the service | CustomerNumber: {}", request.getCustomerNumber());
+            log.warn("Customer has not subscribed to the service | CustomerNumber: {}", request.getCustomerNumber());
             return Util.buildErrorResponse("You have not subscribed to the service.", BAD_REQUEST);
         }
 
         if(loanRepository.findOngoingLoanByCustomerNumber(request.getCustomerNumber()).isPresent()) {
-            log.error("Customer has ongoing loan request | CustomerNumber: {}", request.getCustomerNumber());
+            log.warn("Customer has ongoing loan request | CustomerNumber: {}", request.getCustomerNumber());
             return Util.buildErrorResponse("You have an ongoing loan request.", BAD_REQUEST);
         }
 
@@ -127,7 +127,7 @@ public class LoanService {
 
         List<Loan> loans = loanRepository.findByCustomerNumber(customerNumber);
         if (loans.isEmpty()) {
-            log.info("No loan found | CustomerNumber: {}", customerNumber);
+            log.warn("No loan found | CustomerNumber: {}", customerNumber);
             return Util.buildErrorResponse("No loan found.", NOT_FOUND);
         }
 

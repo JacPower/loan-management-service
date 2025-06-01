@@ -72,7 +72,6 @@ public class TransactionService {
     private List<TransactionDto> extractTransactions(HttpResultDto result, String customerNumber) {
         if (result.isSuccess()) {
             try {
-                System.out.println("transaction=> "+result.getMessage().toString());
                 TransactionSoapResponse response = xmlMapper.readValue(result.getMessage().toString(), TransactionSoapResponse.class);
 
                 if (response != null && response.getTransactions() != null) return response.getTransactions();

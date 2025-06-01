@@ -67,7 +67,7 @@ public class ScoringService {
         if (!result.isSuccess()) {
             int statusCode = result.getStatusCode();
             if (statusCode == HttpStatus.NOT_FOUND.value() || statusCode == HttpStatus.NO_CONTENT.value()) {
-                log.debug("Score not ready yet for token: {}", token);
+                log.warn("Score not ready yet for token: {}", token);
                 return Optional.empty();
             }
 
