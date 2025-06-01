@@ -51,7 +51,6 @@ Mobile App (USSD/iOS/Android) → LMS APIs → CBS (KYC/Transactions) → Scorin
 ### **1. Clone the Repository**
 ```bash
 git clone git@github.com:JacPower/loan-management-service.git
-cd lending-management-service
 ```
 
 ### **2. Build the Project**
