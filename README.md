@@ -376,6 +376,7 @@ Download API specification at:
 - Add rate limiting and throttling
 - Add redis cache
 - Implement circuit breaker pattern
+- Implement events/queue pattern (kafka/rabbitmq)
 - Add comprehensive monitoring (New Relic, Grafana)
 - Database connection pooling and clustering
 - API versioning strategy
