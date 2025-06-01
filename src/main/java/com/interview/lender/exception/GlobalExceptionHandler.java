@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
 @RestControllerAdvice
@@ -100,11 +101,26 @@ public class GlobalExceptionHandler {
 
 
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         log.warn("[Validation Error] Invalid method arguments: {}", exception.getMessage());
         return buildResponse(HttpStatus.BAD_REQUEST, "Invalid input(s) format. Please correct and try again.", exception.getMessage());
+    }
+
+
+
+    @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
+    public ResponseEntity<ResponseDto> handleUnauthorizedException(HttpClientErrorException.Unauthorized exception) {
+        log.warn("[Unauthorized] Access denied: {}", exception.getMessage(), exception);
+        return buildResponse(HttpStatus.UNAUTHORIZED, "Unauthorized access. Please log in.", exception.getMessage());
+    }
+
+
+
+    @ExceptionHandler(HttpClientErrorException.Forbidden.class)
+    public ResponseEntity<ResponseDto> handleForbiddenException(HttpClientErrorException.Forbidden exception) {
+        log.warn("[Forbidden] Access forbidden: {}", exception.getMessage(), exception);
+        return buildResponse(HttpStatus.FORBIDDEN, "You do not have permission to access this resource.", exception.getMessage());
     }
 
 
