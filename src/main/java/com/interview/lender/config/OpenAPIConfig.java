@@ -14,7 +14,7 @@ public class OpenAPIConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Lending Management System API")
+                        .title("Lending Management Service APIs")
                         .description("Digital Lending Platform for micro-loan processing")
                         .version("1.0.0")
                         .contact(new Contact()
