@@ -1,61 +1,50 @@
 package com.interview.lender.dto;
 
-import com.interview.lender.enums.BillingCycle;
-import com.interview.lender.enums.Gender;
-import com.interview.lender.enums.NotificationChannel;
-import com.interview.lender.enums.CustomerStatus;
-import jakarta.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.Set;
-import java.util.UUID;
+import java.time.LocalDateTime;
 
-@Builder
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CustomerDto {
-    UUID id;
-    @NotNull(message = "Preferred billing day cannot be null")
-    Integer preferredBillingDay;
-    @NotBlank(message = "First name cannot be null")
-    @NotBlank(message = "First name cannot be blank")
-    private String firstName;
-    @NotNull(message = "Last name cannot be null")
-    @NotBlank(message = "Last name cannot be blank")
-    private String middleName;
-    @NotNull(message = "Last name cannot be null")
-    @NotBlank(message = "Last name cannot be blank")
-    private String lastName;
-    @NotNull(message = "Gender cannot be null")
-    private Gender gender;
-    @NotNull(message = "Email cannot be null")
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Email must be valid")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime createdAt;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime createdDate;
+
+    private String customerNumber;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime dob;
+
     private String email;
-    @NotNull(message = "phone number cannot be null")
-    @NotBlank(message = "phone")
-    @Pattern(regexp = "^\\d{12}$", message = "Phone number must be 12 digits")
-    private String phone;
-    @NotNull(message = "phone number cannot be null")
-    @NotBlank(message = "phone")
-    @Size(min = 6, max = 20, message = "Id number should contain 6-20 characters")
-    // this includes alien number, passport number and national id number
+    private String firstName;
+    private String gender;
+    private Long id;
     private String idNumber;
-    @NotNull(message = "Date of birth cannot be null")
-    @Past(message = "Date of birth must be in the past")
-    private LocalDate dob;
-    @NotNull(message = "Loan limit cannot be null")
-    @Positive(message = "Loan limit must be positive")
-    private Double loanLimit;
-    @NotNull(message = "Description cannot be null")
-    @NotBlank(message = "Description cannot be blank")
-    private String description;
-    @NotNull(message = "Billing cycle cannot be null")
-    private BillingCycle billingCycle;
+    private String idType;
+    private String lastName;
+    private String middleName;
+    private String mobile;
+    private Double monthlyIncome;
+    private String status;
 
-    private Set<NotificationChannel> preferredChannels;
-
-    @Builder.Default
-    private CustomerStatus status = CustomerStatus.ACTIVE;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime updatedAt;
 }

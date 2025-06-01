@@ -1,0 +1,157 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > EnumSettingsController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.interview.lender.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: EnumSettingsController (com.interview.lender.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EnumSettingsController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/23)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.interview.lender.controller;
+&nbsp;
+&nbsp;import com.interview.lender.dto.ResponseDto;
+&nbsp;import com.interview.lender.enums.*;
+&nbsp;import com.interview.lender.util.Util;
+&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;import static org.springframework.http.HttpStatus.OK;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/settings&quot;)
+<b class="nc">&nbsp;public class EnumSettingsController {</b>
+&nbsp;
+&nbsp;    @GetMapping
+&nbsp;    public ResponseDto getSettings() {
+<b class="nc">&nbsp;        Map&lt;String, Object&gt; settings = new HashMap&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        settings.put(&quot;customerStatus&quot;, CustomerStatus.getCustomerStatus());</b>
+<b class="nc">&nbsp;        settings.put(&quot;genders&quot;, Gender.getGenders());</b>
+&nbsp;
+<b class="nc">&nbsp;        settings.put(&quot;loanStatus&quot;, LoanStatus.getLoanStatus());</b>
+<b class="nc">&nbsp;        settings.put(&quot;loanEventTypes&quot;, LoanEventType.getLoanEventTypes());</b>
+<b class="nc">&nbsp;        settings.put(&quot;loanStructureTypes&quot;, LoanStructureType.getLoanStructureTypes());</b>
+&nbsp;
+<b class="nc">&nbsp;        settings.put(&quot;paymentStatus&quot;, PaymentStatus.getPaymentStatus());</b>
+<b class="nc">&nbsp;        settings.put(&quot;paymentMethods&quot;, PaymentMethod.getPaymentMethods());</b>
+<b class="nc">&nbsp;        settings.put(&quot;installmentStatus&quot;, InstallmentStatus.getInstallmentStatus());</b>
+&nbsp;
+<b class="nc">&nbsp;        settings.put(&quot;feeTypes&quot;, FeeType.getPFeeTypes());</b>
+<b class="nc">&nbsp;        settings.put(&quot;calculationTypes&quot;, CalculationType.getCalculationTypes());</b>
+&nbsp;
+<b class="nc">&nbsp;        settings.put(&quot;productStatus&quot;, ProductStatus.getProductStatus());</b>
+&nbsp;
+<b class="nc">&nbsp;        settings.put(&quot;notificationStatus&quot;, NotificationStatus.getNotificationStatus());</b>
+<b class="nc">&nbsp;        settings.put(&quot;notificationChannels&quot;, NotificationChannel.getNotificationChannels());</b>
+<b class="nc">&nbsp;        settings.put(&quot;notificationTypes&quot;, NotificationType.getNotificationTypes());</b>
+&nbsp;
+<b class="nc">&nbsp;        settings.put(&quot;billingCycleTypes&quot;, BillingCycleType.getBillingCycleTypes());</b>
+<b class="nc">&nbsp;        settings.put(&quot;billingCycles&quot;, BillingCycle.getBillingCycles());</b>
+&nbsp;
+<b class="nc">&nbsp;        settings.put(&quot;applicationTimings&quot;, ApplicationTiming.getApplicationTimings());</b>
+<b class="nc">&nbsp;        settings.put(&quot;tenureTypes&quot;, TenureType.getTenureTypes());</b>
+<b class="nc">&nbsp;        settings.put(&quot;businessRules&quot;, BusinessRules.getBusinessRules());</b>
+<b class="nc">&nbsp;        settings.put(&quot;businessRulesOperations&quot;, BusinessRulesOperations.getBusinessRulesOperations());</b>
+&nbsp;
+<b class="nc">&nbsp;        return Util.buildResponse(&quot;Settings retrieved successfully&quot;, OK, settings);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-05-02 09:17</div>
+</div>
+</body>
+</html>

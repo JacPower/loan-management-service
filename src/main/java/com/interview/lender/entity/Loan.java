@@ -1,72 +1,44 @@
 package com.interview.lender.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.interview.lender.enums.LoanStatus;
-import com.interview.lender.enums.LoanStructureType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "loans")
-@Builder
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class Loan extends BaseEntity {
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
 
     @Column(nullable = false)
-    private Double principalAmount;
+    private String customerNumber;
 
-    @Column(nullable = false)
-    private LocalDate disbursementDate;
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal requestedAmount;
 
-    @Column(nullable = false)
-    private LocalDate dueDate;
+    @Column(precision = 19, scale = 2)
+    private BigDecimal approvedAmount;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private LoanStatus loanStatus;
+    private LoanStatus status;
 
-    @Column(nullable = false)
-    private String loanCode;
+    private Integer creditScore;
+    private BigDecimal creditLimit;
+    private String exclusion;
+    private String exclusionReason;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private LoanStructureType structureType;
+    private LocalDateTime applicationDate;
+    private LocalDateTime approvalDate;
+    private LocalDateTime disbursementDate;
 
-    @Column(nullable = false)
-    private Double currentBalance;
-
-    @Builder.Default
-    @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<LoanFee> appliedFees = new HashSet<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Installment> installments = new ArrayList<>();
-
-    @Column()
-    private String description;
-
-    @Transient
-    private double amountPaid = 0.00;
-
-    @Transient
-    private double lateFeeApplied = 0.00;
+    private Integer retryCount;
 }

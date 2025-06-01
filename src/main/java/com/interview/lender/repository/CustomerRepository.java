@@ -1,19 +1,17 @@
 package com.interview.lender.repository;
 
 import com.interview.lender.entity.Customer;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, UUID> {
-    Optional<Customer> findByEmailOrPhoneOrIdNumber(String email, String phone, String IdNumber);
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    Optional<Customer> findByCustomerNumber(String customerNumber);
 
-    @Query("SELECT c FROM Customer c")
-    List<Customer> findAllAsList(Pageable pageable);
+    List<Customer> findByCustomerNumberIn(List<String> customerNumbers);
+
+    boolean existsByCustomerNumber(String customerNumber);
 }

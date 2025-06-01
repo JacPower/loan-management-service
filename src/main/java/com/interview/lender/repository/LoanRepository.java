@@ -1,24 +1,22 @@
 package com.interview.lender.repository;
 
 import com.interview.lender.entity.Loan;
-import com.interview.lender.enums.LoanStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface LoanRepository extends JpaRepository<Loan, UUID> {
-    boolean existsByCustomerIdAndLoanStatus(UUID customerId, LoanStatus loanStatus);
+public interface LoanRepository extends JpaRepository<Loan, Long> {
 
-    Optional<Loan> findByLoanCodeAndLoanStatus(String code, LoanStatus status);
+    List<Loan> findByCustomerNumber(String customerNumber);
 
-    List<Loan> findByLoanStatus(LoanStatus status);
+    @Query("SELECT l FROM Loan l WHERE l.customerNumber = :customerNumber AND l.status IN ('PENDING', 'SCORING_IN_PROGRESS')")
+    Optional<Loan> findOngoingLoanByCustomerNumber(String customerNumber);
 
-    List<Loan> findByLoanStatusAndDueDateBefore(LoanStatus status, LocalDate date);
-
-    List<Loan> findByLoanStatusAndDueDateBetween(LoanStatus status, LocalDate startDate, LocalDate endDate);
+    @Query("SELECT l FROM Loan l WHERE l.status = 'SCORING_IN_PROGRESS' AND l.retryCount < :maxRetries ORDER BY l.id DESC")
+    List<Loan> findLoansForScoring(Integer maxRetries, Pageable pageable);
 }

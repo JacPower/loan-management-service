@@ -1,71 +1,72 @@
 package com.interview.lender.controller;
 
-import com.interview.lender.dto.GlobalFiltersDto;
-import com.interview.lender.dto.LoanRequestDto;
-import com.interview.lender.dto.PaymentDto;
-import com.interview.lender.dto.ResponseDto;
-import com.interview.lender.rule.RuleDelegator;
+import com.interview.lender.dto.*;
+import com.interview.lender.services.LoanService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
-
-import static com.interview.lender.enums.BusinessRules.LOAN;
-import static com.interview.lender.enums.BusinessRulesOperations.*;
 
 @RestController
 @RequestMapping("/loans")
 @RequiredArgsConstructor
+@Slf4j
+@Tag(name = "Loan Management", description = "APIs for loan management operations")
 public class LoanController {
 
-    private final RuleDelegator ruleDelegator;
+    private final LoanService loanService;
 
 
 
-    @PostMapping
-    public ResponseEntity<ResponseDto> createLoan(@Valid @RequestBody LoanRequestDto requestDto) {
-        ResponseDto response = ruleDelegator.routeRequest(LOAN, CREATE_LOAN, requestDto);
+    @PostMapping("/subscribe")
+    @Operation(summary = "Subscribe customer to lending service", description = "Register a customer for loan services by validating their details through KYC")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Customer subscribed successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "404", description = "Customer not found in KYC system"),
+            @ApiResponse(responseCode = "409", description = "Customer subscription already exist"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<ResponseDto> subscribeCustomer(@Valid @RequestBody SubscriptionRequest request) {
+        var response = loanService.subscribeCustomer(request);
 
-        return new ResponseEntity<>(response, response.getHttpStatus());
+        return ResponseEntity.status(response.getHttpStatus()).body(response);
     }
 
 
 
-    @PostMapping("/pay")
-    public ResponseEntity<ResponseDto> payLoan(@Valid @RequestBody PaymentDto requestDto) {
-        ResponseDto response = ruleDelegator.routeRequest(LOAN, PAY_LOAN, requestDto);
+    @PostMapping("/request")
+    @Operation(summary = "Request a loan", description = "Submit a loan application for a subscribed customer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Loan request submitted successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request or customer has ongoing loan"),
+            @ApiResponse(responseCode = "404", description = "Customer not subscribed"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<ResponseDto> requestLoan(@Valid @RequestBody LoanRequest request) {
+        var response = loanService.requestLoan(request);
 
-        return new ResponseEntity<>(response, response.getHttpStatus());
+        return ResponseEntity.status(response.getHttpStatus()).body(response);
     }
 
 
 
-    @GetMapping
-    public ResponseEntity<ResponseDto> getAllLoans(@Valid GlobalFiltersDto filtersDto) {
-        ResponseDto response = ruleDelegator.routeRequest(LOAN, GET_ALL_LOANS, filtersDto);
+    @GetMapping("/status/{customerNumber}")
+    @Operation(summary = "Get loan status", description = "Retrieve the current status of the most recent loan for a customer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Loan status retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "No loan found for customer"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<ResponseDto> getLoanStatus(@Parameter(description = "Customer number", required = true) @PathVariable String customerNumber) {
+        var response = loanService.getLoanStatus(customerNumber);
 
-        return new ResponseEntity<>(response, response.getHttpStatus());
-    }
-
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto> getLoan(@PathVariable UUID id, @Valid GlobalFiltersDto filtersDto) {
-        filtersDto.setId(id);
-        ResponseDto response = ruleDelegator.routeRequest(LOAN, GET_LOAN, filtersDto);
-
-        return new ResponseEntity<>(response, response.getHttpStatus());
-    }
-
-
-
-    @GetMapping("/{id}/payments")
-    public ResponseEntity<ResponseDto> getLoanPayments(@PathVariable UUID id, @Valid GlobalFiltersDto filtersDto) {
-        filtersDto.setId(id);
-        ResponseDto response = ruleDelegator.routeRequest(LOAN, GET_LOAN_PAYMENTS, filtersDto);
-
-        return new ResponseEntity<>(response, response.getHttpStatus());
+        return ResponseEntity.status(response.getHttpStatus()).body(response);
     }
 }

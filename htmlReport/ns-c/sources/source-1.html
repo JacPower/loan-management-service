@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Customer</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.interview.lender.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: Customer (com.interview.lender.entity)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">Customer</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.interview.lender.entity;
+&nbsp;
+&nbsp;import com.interview.lender.enums.BillingCycle;
+&nbsp;import com.interview.lender.enums.Gender;
+&nbsp;import com.interview.lender.enums.CustomerStatus;
+&nbsp;import com.interview.lender.enums.NotificationChannel;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import lombok.*;
+&nbsp;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;@EqualsAndHashCode(callSuper = true)
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;customers&quot;)
+&nbsp;@Data
+&nbsp;@NoArgsConstructor
+&nbsp;@AllArgsConstructor
+&nbsp;@Builder
+&nbsp;public class Customer extends BaseEntity {
+&nbsp;    @Column(nullable = false)
+&nbsp;    private String firstName;
+&nbsp;
+&nbsp;    @Column(nullable = false)
+&nbsp;    private String middleName;
+&nbsp;
+&nbsp;    @Column(nullable = false)
+&nbsp;    private String lastName;
+&nbsp;
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    @Column(nullable = false)
+&nbsp;    private Gender gender;
+&nbsp;
+&nbsp;    @Column(nullable = false, updatable = false)
+&nbsp;    private LocalDate dob;
+&nbsp;
+&nbsp;    @Column(nullable = false, unique = true)
+&nbsp;    private String email;
+&nbsp;
+&nbsp;    @Column(nullable = false, unique = true)
+&nbsp;    private String phone;
+&nbsp;
+&nbsp;    @Column(nullable = false, unique = true)
+&nbsp;    private String idNumber;
+&nbsp;
+&nbsp;    @Column(nullable = false)
+&nbsp;    private Double loanLimit;
+&nbsp;
+&nbsp;    @Builder.Default
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    @Column(nullable = false)
+&nbsp;    private BillingCycle billingCycle = BillingCycle.INDIVIDUAL;
+&nbsp;
+&nbsp;    @Column
+&nbsp;    private Integer preferredBillingDay;
+&nbsp;
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    @Column(nullable = false)
+&nbsp;    private CustomerStatus accountStatus;
+&nbsp;
+&nbsp;    @Column(nullable = false, unique = true)
+&nbsp;    private String description;
+&nbsp;
+&nbsp;    @Builder.Default
+&nbsp;    @ElementCollection
+&nbsp;    @CollectionTable(name = &quot;customer_notification_channels&quot;, joinColumns = @JoinColumn(name = &quot;customer_id&quot;))
+&nbsp;    @Column(name = &quot;channel&quot;)
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    private Set&lt;NotificationChannel&gt; preferredChannels = new HashSet&lt;&gt;();
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-05-02 11:32</div>
+</div>
+</body>
+</html>

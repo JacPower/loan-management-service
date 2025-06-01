@@ -1,0 +1,269 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TransactionService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.interview.lender.services</a>
+</div>
+
+<h1>Coverage Summary for Class: TransactionService (com.interview.lender.services)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TransactionService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    89.7%
+  </span>
+  <span class="absValue">
+    (26/29)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TransactionService$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TransactionService$MockitoMock$M00qdanX</td>
+  </tr>
+  <tr>
+    <td class="name">TransactionService$MockitoMock$M00qdanX$auxiliary$01VXH4ge</td>
+  </tr>
+  <tr>
+    <td class="name">TransactionService$MockitoMock$M00qdanX$auxiliary$4EyLo3Sf</td>
+  </tr>
+  <tr>
+    <td class="name">TransactionService$MockitoMock$M00qdanX$auxiliary$KWAJL5vy</td>
+  </tr>
+  <tr>
+    <td class="name">TransactionService$MockitoMock$M00qdanX$auxiliary$qmBuTAYA</td>
+  </tr>
+  <tr>
+    <td class="name">TransactionService$MockitoMock$M00qdanX$auxiliary$uHGW8GwV</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (27/30)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.interview.lender.services;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.core.JsonProcessingException;
+&nbsp;import com.fasterxml.jackson.core.type.TypeReference;
+&nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
+&nbsp;import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+&nbsp;import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+&nbsp;import com.interview.lender.config.AppConfig;
+&nbsp;import com.interview.lender.dto.HttpResultDto;
+&nbsp;import com.interview.lender.dto.ResponseDto;
+&nbsp;import com.interview.lender.dto.TransactionDto;
+&nbsp;import com.interview.lender.dto.TransactionSoapResponse;
+&nbsp;import com.interview.lender.util.Util;
+&nbsp;import jakarta.annotation.PostConstruct;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import lombok.extern.slf4j.Slf4j;
+&nbsp;import org.springframework.http.HttpHeaders;
+&nbsp;import org.springframework.http.MediaType;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import static com.interview.lender.util.Constants.MOCK_TRANSACTIONS_RESPONSE;
+&nbsp;import static com.interview.lender.util.Constants.TRANSACTIONS_REQUEST_TEMPLATE;
+&nbsp;import static org.springframework.http.HttpStatus.OK;
+&nbsp;
+&nbsp;@Service
+&nbsp;@RequiredArgsConstructor
+<b class="fc">&nbsp;@Slf4j</b>
+&nbsp;public class TransactionService {
+&nbsp;
+&nbsp;    private final AppConfig appConfig;
+&nbsp;    private final RestClientService restClientService;
+&nbsp;    private final XmlMapper xmlMapper = new XmlMapper();
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    @PostConstruct
+&nbsp;    public void initXmlMapper() {
+<b class="fc">&nbsp;        xmlMapper.registerModule(new JavaTimeModule());</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public ResponseDto getTransactionHistory(String customerNumber) {
+<b class="fc">&nbsp;        String soapRequest = buildSoapRequest(customerNumber);</b>
+<b class="fc">&nbsp;        String url = appConfig.getCbsTransactionUrl();</b>
+<b class="fc">&nbsp;        HttpHeaders headers = new HttpHeaders();</b>
+<b class="fc">&nbsp;        headers.setContentType(MediaType.TEXT_XML);</b>
+<b class="fc">&nbsp;        headers.set(&quot;SOAPAction&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;        headers.set(&quot;Accept&quot;, &quot;text/xml, application/xml&quot;);</b>
+<b class="fc">&nbsp;        HttpResultDto result = restClientService.sendRequest(url, null, headers, soapRequest, String.class);</b>
+&nbsp;
+<b class="fc">&nbsp;        List&lt;TransactionDto&gt; transactions = extractTransactions(result, customerNumber);</b>
+&nbsp;
+<b class="fc">&nbsp;        return Util.buildSuccessResponse(&quot;Transaction history data&quot;, transactions, OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    private String buildSoapRequest(String customerNumber) {
+<b class="fc">&nbsp;        return String.format(</b>
+&nbsp;                TRANSACTIONS_REQUEST_TEMPLATE,
+<b class="fc">&nbsp;                appConfig.getCbsUsername(),</b>
+<b class="fc">&nbsp;                appConfig.getCbsPassword(),</b>
+&nbsp;                customerNumber
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    private List&lt;TransactionDto&gt; extractTransactions(HttpResultDto result, String customerNumber) {
+<b class="fc">&nbsp;        if (result.isSuccess()) {</b>
+&nbsp;            try {
+<b class="fc">&nbsp;                System.out.println(&quot;transaction=&gt; &quot;+result.getMessage().toString());</b>
+<b class="fc">&nbsp;                TransactionSoapResponse response = xmlMapper.readValue(result.getMessage().toString(), TransactionSoapResponse.class);</b>
+&nbsp;
+<b class="pc">&nbsp;                if (response != null &amp;&amp; response.getTransactions() != null) return response.getTransactions();</b>
+<b class="fc">&nbsp;                log.warn(&quot;SOAP response returned with no transactions | CustomerNumber: {}&quot;, customerNumber);</b>
+&nbsp;
+<b class="fc">&nbsp;            } catch (JsonProcessingException e) {</b>
+<b class="fc">&nbsp;                log.error(&quot;Failed to parse SOAP XML response | CustomerNumber: {}&quot;, customerNumber, e);</b>
+<b class="fc">&nbsp;            }</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            log.error(&quot;CBS transaction request failed, returning mock data | CustomerNumber: {}&quot;, customerNumber);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return getMockTransactionHistory();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public List&lt;TransactionDto&gt; getMockTransactionHistory() {
+&nbsp;        try {
+<b class="fc">&nbsp;            return new ObjectMapper().readValue(MOCK_TRANSACTIONS_RESPONSE, new TypeReference&lt;&gt;() {});</b>
+<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
+<b class="nc">&nbsp;            log.error(&quot;Failed to parse mock transactions: &quot;, e);</b>
+<b class="nc">&nbsp;            return List.of();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-06-01 10:12</div>
+</div>
+</body>
+</html>
