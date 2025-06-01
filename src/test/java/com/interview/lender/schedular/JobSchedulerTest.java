@@ -53,14 +53,4 @@ class JobSchedulerTest {
 
         verify(loanService, times(3)).processLoanScoring();
     }
-
-
-
-    private void assertDoesNotThrow(Runnable executable) {
-        try {
-            executable.run();
-        } catch (Exception e) {
-            throw new AssertionError("Expected no exception to be thrown, but got: " + e.getMessage(), e);
-        }
-    }
 }

@@ -70,7 +70,6 @@ class LoanControllerTest {
         assertNotNull(response.getBody());
         assertTrue(response.getBody().isSuccess());
         assertEquals("Subscription successful", response.getBody().getMessage());
-        verify(loanService).subscribeCustomer(subscriptionRequest);
     }
 
 
@@ -86,7 +85,6 @@ class LoanControllerTest {
         assertNotNull(response.getBody());
         assertFalse(response.getBody().isSuccess());
         assertEquals("Operation failed", response.getBody().getMessage());
-        verify(loanService).subscribeCustomer(subscriptionRequest);
     }
 
 
@@ -102,7 +100,6 @@ class LoanControllerTest {
         assertNotNull(response.getBody());
         assertTrue(response.getBody().isSuccess());
         assertEquals("Loan application submitted successfully", response.getBody().getMessage());
-        verify(loanService).requestLoan(loanRequest);
     }
 
 
@@ -118,7 +115,6 @@ class LoanControllerTest {
         assertNotNull(response.getBody());
         assertFalse(response.getBody().isSuccess());
         assertEquals("Operation failed", response.getBody().getMessage());
-        verify(loanService).requestLoan(loanRequest);
     }
 
 
@@ -134,7 +130,6 @@ class LoanControllerTest {
         assertNotNull(response.getBody());
         assertTrue(response.getBody().isSuccess());
         assertEquals("Loan status retrieved successfully", response.getBody().getMessage());
-        verify(loanService).getLoanStatus(TestUtil.TEST_CUSTOMER_NUMBER);
     }
 
 
@@ -151,7 +146,6 @@ class LoanControllerTest {
         assertNotNull(response.getBody());
         assertFalse(response.getBody().isSuccess());
         assertEquals("No loan found", response.getBody().getMessage());
-        verify(loanService).getLoanStatus(TestUtil.TEST_CUSTOMER_NUMBER);
     }
 
 

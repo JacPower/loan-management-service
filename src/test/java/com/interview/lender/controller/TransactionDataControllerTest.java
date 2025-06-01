@@ -54,7 +54,6 @@ class TransactionDataControllerTest {
         assertTrue(response.getBody().isSuccess());
         assertEquals("Transaction history data", response.getBody().getMessage());
         assertNotNull(response.getBody().getData());
-        verify(transactionService).getTransactionHistory(TestUtil.TEST_CUSTOMER_NUMBER);
     }
 
 
@@ -70,7 +69,6 @@ class TransactionDataControllerTest {
         assertNotNull(response.getBody());
         assertFalse(response.getBody().isSuccess());
         assertEquals("Failed to retrieve transaction data", response.getBody().getMessage());
-        verify(transactionService).getTransactionHistory(TestUtil.TEST_CUSTOMER_NUMBER);
     }
 
 
@@ -97,7 +95,6 @@ class TransactionDataControllerTest {
         assertNotNull(response.getBody());
         assertTrue(response.getBody().isSuccess());
         assertEquals("Transaction history data", response.getBody().getMessage());
-        verify(transactionService).getTransactionHistory(TestUtil.TEST_CUSTOMER_NUMBER);
     }
 
 

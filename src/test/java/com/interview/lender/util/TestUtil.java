@@ -29,6 +29,7 @@ public class TestUtil {
     public static final Integer TEST_CREDIT_SCORE = 650;
     public static final String TEST_CBS_USERNAME = "admin";
     public static final String TEST_CBS_PASSWORD = "pwd123";
+
     public static final String MOCK_KYC_XML_RESPONSE = """
             <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
                 <SOAP-ENV:Header/>
