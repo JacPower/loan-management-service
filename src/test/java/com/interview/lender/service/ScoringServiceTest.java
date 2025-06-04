@@ -77,7 +77,7 @@ class ScoringServiceTest {
 
 
     @Test
-    void initXmlMapper_shouldCallRegisterClient_whenPostConstructExecutes() {
+    void init_shouldCallRegisterClient_whenPostConstructExecutes() {
         var clientResponse = TestUtil.createClientRegistrationResponse();
         HttpResultDto result = TestUtil.createSuccessHttpResult(clientResponse);
 
@@ -85,7 +85,7 @@ class ScoringServiceTest {
                 any(ClientRegistrationRequest.class), eq(com.interview.lender.dto.ClientRegistrationResponse.class)))
                 .thenReturn(result);
 
-        scoringService.initXmlMapper();
+        scoringService.init();
 
         verify(restClientService).sendRequest(
                 contains("createClient"),

@@ -29,7 +29,7 @@ public class ScoringService {
 
 
     @PostConstruct
-    public void initXmlMapper() {
+    public void init() {
         registerClient();
     }
 
