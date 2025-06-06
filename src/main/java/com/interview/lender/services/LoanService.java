@@ -156,7 +156,7 @@ public class LoanService {
         Pageable pageable = PageRequest.of(0, 100);
         List<Loan> loansInProgress = loanRepository.findLoansForScoring(maxRetries, pageable);
         List<String> customerNumbers = loansInProgress.stream().map(Loan::getCustomerNumber).distinct().toList();
-
+        //TODO: Update the status of fetched records to a temporary value to avoid duplicate processing before processIndividualLoanScoring finishes
         List<Customer> customers = customerRepository.findByCustomerNumberIn(customerNumbers);
 
         log.info("Found {} loans to process for scoring...", loansInProgress.size());
